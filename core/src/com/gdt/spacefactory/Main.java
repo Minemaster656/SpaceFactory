@@ -41,6 +41,7 @@ public class Main extends Game {
 	//    Vector2 pos;
 	@Override
 	public void create() {
+		
 //        if (Gdx.app.getType()== Application.ApplicationType.Desktop){
 //
 //        }

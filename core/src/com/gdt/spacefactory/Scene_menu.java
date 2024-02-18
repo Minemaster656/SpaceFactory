@@ -57,6 +57,8 @@ public class Scene_menu implements Screen, InputProcessor {
     public Texture logo;
     public Image logo_ui;
     public Application.ApplicationType platform = Gdx.app.getType();
+    public ArrayList<DummyGameObject> drawables = new ArrayList<>();
+    public TextureRegion logo_image;
 
 
     @Override
@@ -93,6 +95,10 @@ public class Scene_menu implements Screen, InputProcessor {
 //        fixStarsArraySize();
 //        recalcNebulaCount();
 //        fixNebulaArraySize();
+
+        for (int i = 0; i < 10; i++) {
+            drawables.add(new DummyGameObject(new Vector2(Utils.randFloat(0, ScrWidth), Utils.randFloat(0, ScrHeight)), 0f, new Vector2(1f, 1f), logo_image, false, false));
+        }
         logo_ui = new Image(logo);
 //        logo_ui.setScale(platform== Application.ApplicationType.Desktop ? 0.4f : 0.6f);
         logo_ui.setScale(0.4f);
@@ -117,6 +123,7 @@ public class Scene_menu implements Screen, InputProcessor {
         mainTrack = Gdx.audio.newMusic(Gdx.files.internal("SpaceTD-MenuTheme.mp3"));
         mainTrack.setLooping(true);
         logo = new Texture("SpaceTDLogo0_4_mvp.png");
+        logo_image = new TextureRegion(new Texture("SpaceFactoryIcon0.png"));
     }
 
     @Override
@@ -137,6 +144,9 @@ public class Scene_menu implements Screen, InputProcessor {
 //            Main.debugData = "Stars count: " + stars.size() + "\n";
 //        }
 
+        for (int i = 0; i < drawables.size(); i++) {
+            drawables.get(i).draw(batch);
+        }
 
         stage.act(delta);
         if (batch.isDrawing()) batch.end();

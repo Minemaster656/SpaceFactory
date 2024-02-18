@@ -24,15 +24,54 @@ public abstract class GameObject<ColliderType extends Octree.Collider> implement
     //    public Rectangle collider;
     public ColliderType collider;
     public String id;
-    public float velocity;
+//    public float velocity;
+
+    //Physics lol
+    public Vector2 velocity;
+    public float angularVelocity;
+    public float mass;
+    public boolean usePhysics;
+    public float gravityScale;
+
     Vector2 oldPos;
     public boolean isDestroyed;
-    public float glowSize = 0;
+//    public float glowSize = 0;
 //    public ShaderProgram glowShader = Shaders.glowShader;
-    public Texture textureFromRegion;
-    public Color glowColor=new Color(1, 1, 1, 1);
+//    public Texture textureFromRegion;
+//    public Color glowColor=new Color(1, 1, 1, 1);
 
 
+    public GameObject(
+            Vector2 position,
+            float rotation,
+            Vector2 scale,
+            TextureRegion texture,
+            boolean flipX,
+            boolean flipY,
+
+            boolean usePhysics,
+            float mass //TODO: добавить физику в конструкторы
+    ) {
+        this.position = position;
+        this.rotation = rotation;
+        this.scale = scale;
+        this.texture = texture;
+        this.flipX = flipX;
+        this.flipY = flipY;
+
+        this.usePhysics = usePhysics;
+        this.mass = mass;
+        this.gravityScale = usePhysics ? 1 : 0;
+        this.velocity=Vector2.Zero;
+        this.angularVelocity = 0;
+
+        this.id = this.getClass().getName() + Utils.randInt(0, 10000) + "";
+        this.isDestroyed = false;
+        this.originPoint = new Vector2(size.x / 2, size.y / 2);
+        this.size = new Vector2(texture.getRegionWidth(), texture.getRegionHeight());
+
+
+    }
 
     public GameObject(Vector2 position, float rotation, Vector2 size, Vector2 scale, Vector2 originPoint, TextureRegion texture, boolean flipX, boolean flipY) {
         this.position = position;
@@ -45,7 +84,7 @@ public abstract class GameObject<ColliderType extends Octree.Collider> implement
         this.flipY = flipY;
         this.id = this.getClass().getName() + Utils.randInt(0, 10000) + "";
         this.isDestroyed = false;
-        this.textureFromRegion=Utils.getTextureFromTextureRegion(this.texture);
+//        this.textureFromRegion=Utils.getTextureFromTextureRegion(this.texture);
     }
 
     public GameObject(Vector2 position, float rotation, Vector2 size, Vector2 scale, TextureRegion texture, boolean flipX, boolean flipY) {
@@ -59,7 +98,7 @@ public abstract class GameObject<ColliderType extends Octree.Collider> implement
         this.flipY = flipY;
         this.id = this.getClass().getName() + Utils.randInt(0, 10000) + "";
         this.isDestroyed = false;
-        this.textureFromRegion=Utils.getTextureFromTextureRegion(this.texture);
+//        this.textureFromRegion=Utils.getTextureFromTextureRegion(this.texture);
     }
 
     public GameObject(Vector2 position, float rotation, Vector2 scale, TextureRegion texture, boolean flipX, boolean flipY) {
@@ -73,7 +112,7 @@ public abstract class GameObject<ColliderType extends Octree.Collider> implement
         this.flipY = flipY;
         this.id = this.getClass().getName() + Utils.randInt(0, 10000) + "";
         this.isDestroyed = false;
-        this.textureFromRegion=Utils.getTextureFromTextureRegion(this.texture);
+//        this.textureFromRegion=Utils.getTextureFromTextureRegion(this.texture);
     }
 
     public GameObject(Vector2 position, float rotation, TextureRegion texture, Vector2 scale, Vector2 originPoint, boolean flipX, boolean flipY) {
@@ -87,7 +126,7 @@ public abstract class GameObject<ColliderType extends Octree.Collider> implement
         this.flipY = flipY;
         this.id = this.getClass().getName() + Utils.randInt(0, 10000) + "";
         this.isDestroyed = false;
-        this.textureFromRegion=Utils.getTextureFromTextureRegion(this.texture);
+//        this.textureFromRegion=Utils.getTextureFromTextureRegion(this.texture);
     }
 
     public abstract void update(float delta);
@@ -128,9 +167,20 @@ public abstract class GameObject<ColliderType extends Octree.Collider> implement
                 onShowColliders();
             }
         }
-        if (oldPos != null) {
-            velocity = this.position.dst(oldPos);
+        //PHYSICS!!!
+        if (usePhysics){
+            rotation+=angularVelocity;
+            position.add(velocity);
+
+
+
         }
+
+
+
+//        if (oldPos != null) {
+//            velocity = this.position.dst(oldPos);
+//        }
         oldPos = position;
     }
 

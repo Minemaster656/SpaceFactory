@@ -85,7 +85,7 @@ public class Scene_menu implements Screen, InputProcessor {
             public void clicked(InputEvent event, float x, float y) {
 //                Gdx.app.log("Button", "Clicked!");
                 System.out.println("Clicked!");
-                Main.messages.add("open scene_startMain");
+                Main.messages.add("open scene_main");
             }
         });
 

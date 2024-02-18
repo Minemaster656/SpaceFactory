@@ -65,13 +65,13 @@ public class Main extends Game {
 //					messages.remove(i);
 //					break;
 //				}
-//				if (messages.get(i).equals("open scene_main")) {
-//					scene_main = new Scene_main();
-//					setScreen(scene_main);
-//					scene_main.show();
-//					messages.remove(i);
-//					break;
-//				}
+				if (messages.get(i).equals("open scene_main")) {
+					scene_main = new Scene_main();
+					setScreen(scene_main);
+					scene_main.show();
+					messages.remove(i);
+					break;
+				}
 			}
 		}
 		getScreen().render(Gdx.graphics.getDeltaTime());
